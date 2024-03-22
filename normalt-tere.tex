@@ -1,0 +1,237 @@
+\chapter{Normált terek}
+Eddig csak valós számokra alkalmaztuk az abszolútérték függvényt, amikor hibafogalmakról beszéltünk. Megeshet, hogy a keresett érték nem egy valós szám, hanem például egy mátrix vagy egy függvény vagy egy tetszőleges operátor. Ilyenkor nem tudjuk alkalmazni a szokásos abszolút érték függvényt, mert nem tudjuk, hogy mit jelent egy mátrix abszolútértéke.
+
+A megoldás az lesz, hogy egy olyan teret vezessünk be, melynek elemeire lehet a kiterjesztett abszolútérték függvényt használni.
+
+\section{Normált tér}
+Ahhoz, hogy kiterjesszük az abszolútérték függvényt tekintsük a tulajdonságait, hogy mit kéne örökölni egy tágabb hossz fogalomnak:
+\begin{enumerate}
+    \item $|x| \geq 0 \quad \forall x \in \mathbb{R}$ es $|x| = 0 \iff x = 0$
+    \item $|\lambda x| = |\lambda|\cdot|x|$ (abszolút homogenitás)
+    \item $|x + y| \leq |x| + |y| \quad \forall x,y \in \mathbb{R}$ (háromszög egyenlőtlenség)
+\end{enumerate}
+
+\begin{definition}
+    Legyen $X$ tetszőleges vektortér, és $\lvert \lvert \cdot \rvert \rvert:X \to \mathbb{R}$ egy függvény a következő tulajdonságokkal:
+    \begin{enumerate}
+        \item $\lvert \lvert x \rvert \rvert \geq 0 \quad \forall x \in X$ es $\lvert \lvert x \rvert \rvert = 0 \iff x = 0_{X}$ ($X$ nullvektora)
+        \item $\lvert \lvert \lambda x \rvert \rvert = \lvert \lambda \rvert \cdot \lvert \lvert x \rvert \rvert \quad \forall x \in X, \forall \lambda \in \mathbb{R}$
+        \item $\lvert \lvert x + y \rvert \rvert \leq \lvert \lvert x \rvert \rvert + \lvert \lvert y \rvert \rvert \quad \forall x, y \in X$
+    \end{enumerate}
+
+Ekkor ezen $\lvert \lvert \cdot \rvert \rvert$ függvényt normának nevezzük és a normált tér (N.T.) a kovetkező rendezett pár: $(X, \lvert \lvert \cdot \rvert \rvert)$.
+\end{definition}
+
+\begin{definition}
+    Ha $(X, \lvert \lvert \cdot \rvert \rvert)$ NT, akkor $x, y \in X$ elemek távolságán az $\lvert \lvert x-y \rvert \rvert$ számot értjuk.
+\end{definition}
+
+
+\begin{pelda}
+    Példák normákra és normált terekre:
+\begin{enumerate}
+    \item $X = \mathbb{R}$ és $\lvert \lvert \cdot \rvert \rvert = \lvert \cdot \rvert$ 
+    
+    \item $X = \mathbb{R}^{n}$ a következő normákkal:
+    \begin{enumerate}[(i)]
+        \item $\lvert \lvert x \rvert\rvert_{1} :=   \sum \lvert x_{j} \rvert$
+        \item $\lvert \lvert x \rvert \rvert_{2} := \sqrt{ \sum \lvert x_{j} \rvert^{2} }$
+        \item $\lvert \lvert x \rvert \rvert_{\infty} := \max \{ \lvert x_{j} \rvert \}$
+        \item $\lvert \lvert x \rvert \rvert_{p} := \left( \sum \lvert x_{j} \rvert^{p} \right)^{1 / p}$
+        
+        Ha $p \to \infty \implies \lvert \lvert x \rvert \rvert_{p} \to \lvert \lvert x \rvert \rvert_{\infty} \quad \forall x \in X$
+    \end{enumerate}
+
+    \item $X = C[a, b]$ a következő normákkal:
+    \begin{enumerate}[(i)]
+        \item $\lvert \lvert f \rvert \rvert_{\infty} := \max_{x \in[a, b]} \lvert f(x) \rvert$ 
+	\item $\lvert \lvert f \rvert \rvert_{\int} := \int _{a}^{b} \lvert f(x) \rvert \, dx$
+    \end{enumerate}
+		
+\end{enumerate}
+\end{pelda}
+
+\section{Fontos fogalmak normált terekben}
+Most hogy már kiterjesztettük a hossz fogalmát normált terekre, így képesek vagyunk az előző fejezetekben bezetett fogalmak analóg módon megfogalmazni általánosabban.
+\begin{enumerate}
+    \item \textbf{Hibafogalmak} \\
+    Legyen $(X, \lvert \lvert \cdot \rvert \rvert)$ egy tetszőleges NT, $a, \tilde{a} \in X$
+    \begin{itemize}
+        \item $\tilde{a}$ abszolút hibája: $a - \tilde{a} \in X$ 
+        \item $\tilde{a}$ abszolút hibakorlátja: $\Delta_{a}$ szám, melyre $\lvert \lvert a- \tilde{a} \rvert \rvert \leq \Delta_{a}$ 
+        \item $\tilde{a}$ relatív hibája: $\frac{a - \tilde{a}}{ \lvert \lvert \tilde{a} \rvert \rvert} \in X$
+        \item $\tilde{a}$ relatív hibakorlátja: $\frac{\lvert \lvert a- \tilde{a} \rvert \rvert}{ \lvert \lvert \tilde{a} \rvert \rvert} \leq \delta_{a}\in\mathbb{R}$
+    \end{itemize}
+
+    
+    \item \textbf{Konvergencia}
+    \begin{definition}
+        Azt mondjuk, hogy az $(X_{n}) \subset X$ sorozat konvergens, ha $\exists x \in X$: $\lvert \lvert x_{n}- x \rvert \rvert \to 0$.
+    \end{definition}
+\end{enumerate}
+
+\section{Mátrixnormák}
+Tudjuk, hogy az $\mathbb{R}^{n \times n}$-es mátrixok a rajta értelmezett $+$ (összeadás) és $\lambda$-val való szorzás műveletekkel vektorteret alkotnak.
+\begin{kerdes}
+    Hogyan definiálható ezen a vektortéren norma?
+\end{kerdes}
+
+\begin{definition}
+    Legyen $\lvert \lvert \cdot \rvert \rvert _\mathbb{R^{n}}$ egy $\mathbb{R}^{n}$ -beli vektornorma. Ekkor az $A \in \mathbb{R}^{n \times n}$ mátrix ezen vektornorma által indukált mátrixnormáján a következő számot értjük: 
+    \begin{equation*}
+\lvert \lvert A \rvert  \rvert := \sup_{x \in \mathbb{R}^{n} \; x \neq 0} \frac{\lvert \lvert Ax \rvert  \rvert _{\mathbb{R}^{n}}}{\lvert \lvert x \rvert  \rvert _{\mathbb{R}^{n}}}
+    \end{equation*}
+\end{definition}
+Magyarázó jelentések a definícióhoz:
+\begin{itemize}
+    \item $\lvert \lvert Ax \rvert \rvert_{\mathbb{R}^{n}}$ - az $Ax$ vektor "hossza"
+    \item $\frac{\lvert \lvert Ax \rvert  \rvert _{\mathbb{R}^{n}}}{\lvert \lvert x \rvert  \rvert _{\mathbb{R}^{n}}}$ - hányszorosára nyújtotta az $A$ mátrix az $x$ vektort
+    \item $\sup_{x \in \mathbb{R}^{n} \; x \neq 0} \frac{\lvert \lvert Ax \rvert  \rvert _{\mathbb{R}^{n}}}{\lvert \lvert x \rvert  \rvert _{\mathbb{R}^{n}}}$ - lehetséges legnagyobb megnyújtásnak az értéke
+\end{itemize}
+
+\begin{pelda}
+    \begin{enumerate}
+        \item \begin{equation*}
+            \lvert \lvert I \rvert \rvert = \sup_{x \in \mathbb{R}^{n}, x \neq 0} \frac{\lvert \lvert Ix \rvert  \rvert _{\mathbb{R}^{n}}}{\lvert \lvert x \rvert  \rvert _{\mathbb{R}^{n}}} = \sup_{x \in \mathbb{R}^{n}, x \neq 0} \frac{\lvert \lvert x \rvert  \rvert }{\lvert \lvert x \rvert  \rvert } = \sup 1 = 1
+        \end{equation*}
+        Tehát bármelyik $\lvert \lvert \cdot \rvert \rvert_{\mathbb{R}^{n}}$ norma által indukált mátrixnormában $\lvert \lvert I \rvert \rvert = 1$.
+
+        \item A sup-norma kiszámítása a tanult vektornormák esetén:
+            Ha $\lvert \lvert \cdot \rvert \rvert_{\mathbb{R}^{n}} = \lvert \lvert \cdot \rvert \rvert_{1}$, akkor:
+            \begin{equation*}
+                \lvert \lvert A \rvert  \rvert  = \lvert \lvert A \rvert  \rvert _{1} = \max_{j \in \{ 1, \dots, n \}} \sum_{i = 1} ^{n} \lvert a_{ij} \rvert 
+            \end{equation*}
+            max oszlopösszeg! \\
+            Például:
+            \begin{equation*}
+                \begin{bmatrix}
+                -2 && 1 \\
+                0 && 3
+                \end{bmatrix}
+                \implies \lvert \lvert A \rvert  \rvert_{1} =  \max \{ \lvert -2 \rvert + \lvert 0 \rvert, \lvert 1 \rvert + \lvert 3 \rvert  \} = 3
+            \end{equation*}
+
+        \item Ha $\lvert \lvert \cdot \rvert \rvert = \lvert \lvert \cdot \rvert \rvert_{2}$, akkor:
+        \begin{equation*}
+            \lvert \lvert A \rvert \rvert = \lvert \lvert A \rvert \rvert_{2} = \sqrt{ \lambda_{\max} (A^{T}A) }
+        \end{equation*}
+        ahol $\lambda_{\max}$ a legnagyobb sajátértéket jelöli.
+        Neve: "spektrálnorma", mert a sajátértékek halmazát "spektrál"-nak nevezik.
+
+        \item Ha $\lvert \lvert \cdot \rvert \rvert = \lvert \lvert \cdot \rvert \rvert_{\infty}$, akkor:
+        \begin{equation*}
+            \lvert \lvert A \rvert \rvert = \lvert \lvert A \rvert \rvert_{\infty} = \max_{i \in \{ 1, \dots, n \}} \sum_{j=1}^{n} \lvert a_{ij} \rvert 
+        \end{equation*}
+        max sorosszeg!\\
+        Például:
+    
+        \begin{equation*}
+            \begin{bmatrix}
+            -2 & 1 \\
+            0 & 3
+            \end{bmatrix}
+            \implies \lvert \lvert A \rvert  \rvert _{\infty} = \max \{ \lvert -2 \rvert + \lvert 1 \rvert , \lvert 0 \rvert + \lvert 3 \rvert  \} = 3
+        \end{equation*}
+    \end{enumerate}
+\end{pelda}
+
+\begin{allitas}
+    Az indukált mátrix normákra igazak a következők:
+    \begin{enumerate}
+        \item $\lvert \lvert Ax \rvert \rvert \leq \lvert \lvert A \rvert \rvert \cdot \lvert \lvert x \rvert \rvert \quad \forall A \in \mathbb{R}^{n \times n}$, $\forall x \in \mathbb{R}^{n}$.
+
+        \item $\lvert \lvert I \rvert \rvert = 1$ (láttuk).
+
+        \item $\lvert \lvert A \cdot B \rvert \rvert \leq \lvert \lvert A \rvert \rvert \cdot \lvert \lvert B \rvert \rvert \quad \forall A, B \in \mathbb{R}^{n\times n}$ (szub multiplikativitás).
+    \end{enumerate}
+\end{allitas}
+
+\begin{megj}
+    Vannak egyéb, nem indukált, mátrix normák. például:
+    \begin{enumerate}
+        \item $\lvert \lvert A \rvert \rvert' = \max_{i, j} \lvert a_{ij} \rvert$ (maximális elem)
+        \item $\lvert \lvert A \rvert \rvert'' = \sum_{i, j = 1} ^{n} \lvert a_{ij} \rvert$ (elemösszeg)
+        \item $\lvert \lvert A \rvert \rvert_{F} = \sqrt{ \sum_{i, j = n} ^{n} a_{ij}^{2} }$ (Frobenius norma)
+    \end{enumerate}
+    Ezekre a normákra nem mindig teljesülnek az előbb állított tulajdonságok.
+\end{megj}
+
+\section{Kondíciószám}
+Az előbb egy példában bemutattuk, hogy egy lineáris egyenletrendszernek $Ax = b$-nek az $A$ együtthatómátrixának egy elemét kicsit pertulbálva a megoldás drasztikusan változhat. Célunk, hogy megfogalmazzuk, hogy mennyire változhat a megoldás kis perturbációra.
+
+A továbbiakban a következő egyenletrendszerrel fogunk foglalkozni.
+\begin{equation}\label{eq:1}
+    Ax = b 
+\end{equation}
+Ahol $A \in \mathbb{R}^{n \times n}, \; \det A \neq 0, \; b \in \mathbb{R}^{n}$
+
+Tegyük fel, hogy  $b$ helyett a pertulbált $\tilde{b}$ van a jobb oldalon:
+\begin{equation*}\label{eq:2}
+    A\tilde{x} = \tilde{b}
+\end{equation*}
+
+Jelölje:
+\begin{align*}
+    \Delta x & = x- \tilde{x} \implies \tilde{x} = x - \Delta x \\
+    \Delta b & = b - \tilde{b} \implies \tilde{b} = b - \Delta b
+\end{align*}
+Ekkor:
+\begin{align*}
+A\tilde{x} & = \tilde{b} \\
+A(x - \Delta x) & = b - \Delta b \\
+Ax - A\Delta x & = b - \Delta b \\ 
+A\Delta x & = \Delta b \\
+\Delta x & = A^{-1}\Delta b
+\end{align*}
+
+Nézzük $\lvert \lvert \Delta x \rvert  \rvert$-át valamelyik $\mathbb{R}^{n}$-beli normában:
+\begin{equation*}
+    \lvert \lvert \Delta x \rvert  \rvert  = \lvert \lvert A^{-1}\Delta b \rvert  \rvert \leq \lvert \lvert A^{-1} \rvert  \rvert  \cdot \lvert \lvert \Delta b \rvert  \rvert 
+\end{equation*}
+Most alkalmazzük a \ref{eq:1}-es egyenletrendszerre a normát.
+\begin{equation*}
+    b = Ax
+\end{equation*}
+\begin{align*}
+    \lvert \lvert b \rvert  \rvert  = \lvert \lvert Ax \rvert  \rvert \leq \lvert \lvert A \rvert  \rvert \cdot \lvert \lvert x \rvert  \rvert \\
+    \frac{1}{\lvert \lvert x \rvert  \rvert } \leq \lvert \lvert A \rvert  \rvert  \cdot \frac{1}{\lvert \lvert b \rvert  \rvert } \\
+    \implies \frac{\lvert \lvert \Delta x \rvert  \rvert }{\lvert \lvert x \rvert  \rvert } \leq \lvert \lvert A^{-1} \rvert  \rvert  \cdot \lvert \lvert A \rvert  \rvert  \cdot \frac{\lvert \lvert \Delta b \rvert  \rvert }{\lvert \lvert b \rvert  \rvert }
+\end{align*}
+Tehét azt kaptuk, hogy minél nagyobb $\lvert \lvert A^{-1} \rvert  \rvert  \cdot \lvert \lvert A \rvert  \rvert$ annál pontatlanabb a becslés.
+
+\begin{definition}
+    Az $\lvert \lvert A^{-1} \rvert  \rvert  \cdot \lvert \lvert A \rvert  \rvert$ számat az $A$ mátrix kondició számának nevezzük és $\operatorname{cond}(A)$-val jelöljük.
+\end{definition}
+
+\begin{definition}
+    Azt mondjuk, hogy a \ref{eq:1}-es egyenletrendszer rosszul kondicionált, ha $\operatorname{cond}(A) \gg 1$.
+\end{definition}
+
+\begin{pelda}
+    Nezzük meg a már említett példának a kondició számát.
+    \begin{equation*}
+    A = \begin{bmatrix}
+        1 && 1  \\
+        1 && 1.01
+    \end{bmatrix}
+    \end{equation*}
+    Alkalmazzuk az $\lvert \lvert \cdot \rvert \rvert_{1}$ által indukált mátrix normát.
+    \begin{equation*}
+        \lvert \lvert A \rvert  \rvert _{1} = 2.01
+    \end{equation*}
+    \begin{equation*}
+        A^{-1} =
+        \begin{bmatrix}
+            101 && -100 \\
+            -100 && 100
+        \end{bmatrix}
+        \implies \lvert \lvert A^{-1} \rvert  \rvert _{1} = 201
+    \end{equation*}
+    \begin{equation*}
+        \operatorname{cond}(A) = 201 \cdot 2.01 = 404.01 \gg 1
+    \end{equation*}
+    Tehát valóban rosszul kondicionált volt az egyenlet rendszer.
+
+\end{pelda}
+
+

@@ -1,0 +1,135 @@
+\chapter{Általános algebrai egyenletek megoldása}
+
+Ebben a fejezetben egyismeretlenes valós egyenletekkel foglalkozunk. Egy ilyen egyenlet mindig felírható a következő alakban:
+\begin{equation}\label{eq:7}
+    f(x) = 0
+\end{equation}
+ahol $f: \mathbb{R} \to \mathbb{R}$ függvény.
+
+Ezzel \ref{eq:7}-nek a megoldása ugyanaz mint $f$ zérushelye. Ezt keressük a továbbiakban!
+
+\section{Gyökök stabilitása}
+\begin{kerdes}
+    Mennyire érzékeny a megoldás $f$ kis megvaltoztatasara?
+\end{kerdes}
+
+Tegyük fel, hogy \ref{eq:7} helyett az 
+\begin{equation}\label{eq:8}
+    \tilde{f}(x) = 0
+\end{equation}
+Egyenletet oldjuk meg, és tegyük fel, hogy \ref{eq:7}-nek és \ref{eq:8}-nek is $\exists!$ megoldása, melyek $x^{*}$ illetve $\tilde{x}^{*}$ rendre.
+
+A következő legyen a mérőszámunk az eltérésre:
+\begin{equation*}
+    \lvert x^{*} - \tilde{x}^{*} \rvert  \leq \; \text{?}
+\end{equation*}
+Ha $f$ és $\tilde{f}$ csak \textit{kicsit} tér el egymástól, akkor legfeljebb mennyire tér el $x^*$ és $\tilde{x}^*$?
+Mérje $\max \limits_{[a, b]} \lvert f - \tilde{f} \rvert$ az $f$ és $\tilde{f}$ eltérését.
+
+Tegyük fel, hogy $f \in C[a, b] \cap D(a, b)$ 
+
+\textit{Ismétlés:} (Lagrange-középérték tétél)
+Tegyük fel, hogy $f \in C[a, b] \cap D(a, b)$. Ekkor $\exists c \in (a, b)$ úgy, hogy
+\begin{equation*}
+    f'(c) = \frac{f(b) - f(a)}{b - a}
+\end{equation*}
+
+Továbbá tegyük fel, hogy $x^{*}$ és $\tilde{x}^{*} \in [a, b]$, és $\max \limits_{[a, b]} \lvert f - \tilde{f} \rvert < \varepsilon$.
+Alkalmazzuk a Lagrange-középérték tételt az $[x^{*}, \tilde{x}^{*}]$ intervallumon (feltéve, hogy $x^{*} < \tilde{x}^{*}$):
+\begin{equation*}
+    \exists c \in (x^{*}, \tilde{x}^{*}): \quad f(\tilde{x}^{*}) - f(x^{*}) = f'(c)(\tilde{x}^{*} - x^{*})
+\end{equation*}
+Tegyük fel, hogy $f'(x) \neq 0 \quad \forall x \in (x^{*}, \tilde{x}^{*})$.
+\begin{equation*}
+    \iff \lvert \tilde{x}^{*} - x^{*} \rvert = \left\lvert  \frac{f(\tilde{x}^{*})}{f'(c)}  \right\rvert  = \frac{\lvert f(\tilde{x}^{*}) - \tilde{f}(\tilde{x}^{*}) \rvert}{\lvert f'(c) \rvert } < \frac{\varepsilon}{\min \limits_{[a, b]} \lvert f' \rvert  }
+\end{equation*}
+
+\begin{definition}
+    Az $M : = \frac{1}{\min \limits_{[a, b]} \lvert f' \rvert  }$ számot a \ref{eq:7} egyenlet \textit{kondicionáltsági számának} nevezzük.
+\end{definition}
+
+Tehát ha $\max \limits_{[a, b]}\lvert f - \tilde{f} \rvert < \varepsilon$, akkor $\lvert  \tilde{x}^{*} - x^{*} \rvert < M \cdot \varepsilon$.
+
+
+\section{Konvergencia sebesség}
+Tegyük fel, hogy $\lim_{ k \to \infty }x_{k} = x^{*}$, és legyen $e_{k} := x_{k} - x^{*}$. ($\lim_{ k \to \infty } e_{k} = 0$ vagy $\lim_{ k \to \infty }\lvert e_{k} \rvert = 0$)
+
+\begin{definition}
+    Azt mondjuk, hogy az $(x_{k})$ sorozat konvergencia rendje $p \geq 1$, ha
+    \begin{equation*}
+        \lim_{ k \to \infty } \frac{\log \lvert e_{k} \rvert }{\log \lvert e_{k-1} \rvert } = p
+    \end{equation*}
+    \begin{itemize}
+        \item Ha $p = 1$, akkor lineáris vagy elsőrendű konvergenciáról beszélunk. \\
+        \item Ha $p = 2$, akkor másodrendű vagy kvadratikus konvergenciáról beszélünk. \\
+    \end{itemize}
+\end{definition}
+
+\begin{pelda} Elsőrendű és másodrendű konvergens sorozatok hibatagjainak lecsengésére példák.
+    
+\textbf{Elsőrendű:}
+\begin{center}
+\begin{tabular}{||c c c||} 
+ \hline
+  & $\lvert e_k \rvert$ & $\frac{\log \lvert e_{k} \rvert}{\log \lvert e_{k-1} \rvert}$ \\ [0.5ex] 
+ \hline\hline
+ $k = 1$ & $10^{-3}$ & N/A \\ 
+ \hline
+ $k = 2$ & $10^{-4}$ & $1.33$ \\
+ \hline
+ $k = 3$ & $10^{-5}$ & $1.25$ \\ [1ex] 
+ \hline
+\end{tabular}
+\end{center}
+
+\textbf{Másodrendű:}
+\begin{center}
+\begin{tabular}{||c c c||} 
+ \hline
+  & $\lvert e_k \rvert$ & $\frac{\log \lvert e_{k} \rvert}{\log \lvert e_{k-1} \rvert}$ \\ [0.5ex] 
+ \hline\hline
+ $k = 1$ & $10^{-3}$ & N/A \\ 
+ \hline
+ $k = 2$ & $10^{-6}$ & $2$ \\
+ \hline
+ $k = 3$ & $10^{-12}$ & $2$ \\ [1ex] 
+ \hline
+\end{tabular}
+\end{center}
+\end{pelda}
+
+
+\begin{allitas}
+    Tegyük fel, hogy $\lvert e_{k} \rvert = c_{k} \cdot \lvert e_{k-1} \rvert, \quad k = 1, 2, \dots$ ahol $0 < \underline{c} \leq c_{k} \leq \overline{c} < 1$. Valamilyen $\underline{c}$ és $\overline{c}$ konstansokra. \\
+    Ekkor $x_{k} \to x^{*}$ monoton módon és elsőrendben.
+\end{allitas}
+
+\textit{Bizonyítás:}
+\textit{Monotonan}, mivel $0 < c_{k} < 1 \implies \lvert e_{k} \rvert < \lvert e_{k-1} \rvert$ $\quad \forall k = 1, 2, \dots$ $\implies (\lvert e_{k} \rvert)$ sorozat monoton csökkenő.
+
+\textit{Konvergál}, mivel $\lvert e_{k} \rvert = c_{k} \cdot \lvert e_{k_{1}} \rvert \leq \overline c \cdot \lvert e_{k-1} \rvert \leq \overline c \cdot \overline c \cdot \lvert e_{k-2} \rvert \leq \dots \leq \overline c^{k} \cdot \lvert e_{0} \rvert$.  Mivel $\overline c < 1$ ezért tényleg $\lim_{ k \to \infty }\lvert e_{k} \rvert = 0$.
+
+A feltételben lévő egyenletnek mindkét oldalán logaritmust véve:
+\begin{equation*}
+    \log \lvert e_{k} \rvert  = \log c_{k} + \log \lvert e_{k-1} \rvert 
+\end{equation*}
+\begin{equation*}
+    \implies \frac{\log \lvert  e_{k} \rvert }{\log \lvert e_{k-1} \rvert } = \frac{\log c_{k}}{\log \lvert e_{k-1} \rvert } + 1
+\end{equation*}
+Lltszik, hogy $\log \lvert e_{k-1} \rvert \to - \infty$. Mostmár elegendő lenne belátni, hogy $\log c_{k}$ korlátos.
+\begin{equation*}
+    \log \underline c < \log c_{k} \leq 0
+\end{equation*}
+Tehát $\frac{\log c_{k}}{\log \lvert e_{k-1} \rvert } \to 0 \implies$ a jobb oldal $\to 1$ $\implies$ $p = 1$ a konvergencia rendje, azaz elsőrendű a konvergencia.
+
+\begin{allitas}
+    Tegyük fel, hogy $\lvert e_{k} \rvert = c_{k} \cdot \lvert e_{k-1} \rvert^{p} \quad k = 1, 2, \dots$ ahol $p > 1$ és $0 < \underline{c} \leq c_{k} \leq \overline c < + \infty$. Valamilyen $\underline{c}$ és $\overline c$ konstansokra. Továbbá $\overline{c}^{1/p-1} \cdot \lvert e_{0} \rvert < 1$. Ekkor $(x_{k})$ konvergens és a konvergencia rendje $p$.
+\end{allitas}
+
+\begin{megj}
+    Az utóbbi feltétel azt jeletnti, hogy a konvergencia csak akkor következik, ha $x_{0}$ elég közel van $x^{*}$-hoz. Ugyanakkor $\overline c < + \infty$, és nem kell teljesülnie, hogy $\overline c < 1$.
+\end{megj}
+
+
+
+

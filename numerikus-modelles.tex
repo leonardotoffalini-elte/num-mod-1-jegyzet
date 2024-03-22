@@ -1,0 +1,128 @@
+\chapter{Numerikus modellezés}
+Ebben a fejezetben tárgyalni fogjuk az alapvető lépéseit és fogalmait a numerikus modellezésnek és a numerikus módszereknek.
+% TODO: Hosszab bevezeto es motivacio!
+
+\section{Numerikus modellezés lépései}
+\begin{enumerate}
+    \item \textbf{Valódi probléma} \\
+    Halpopuláció időbeli fejlődése.
+
+    \item \textbf{Tudományos modell} \\
+    Vannak zsákmanyhalak és ragadozó halak. A zsákmányhalak és a ragadozóhalak populációját befolyásolni, többek között:
+    \begin{itemize}
+        \item természetes szaporulat
+        \item ragadozók esznek zsákmány halakat
+        \item természetes pusztulás
+    \end{itemize}
+
+    \item \textbf{Matematikai modell}
+    \begin{itemize}
+        \item jelölje $x(t)$ a zsűkmányhalak $t$ időbeli össztömegét
+        \item jelölje $y(t)$ a ragadozóhalak $t$ időbeli össztömegét
+    \end{itemize}
+    Ezekkel a jelölésekkel felírhatjuk a változók közti összefüggést egy differenciálegyenlettel:
+    \begin{align*}
+        x' & = ax - bxy \\
+        y' & = -cy + dxy \\
+        x(0) & = x_{0} \\
+        y(0) & = y_{0}
+    \end{align*}
+
+    \item \textbf{Numerikus modell} \\
+    Közelítő módszert alkalmazunk az előző, úgy nevezett \textit{Lotka Volterra} egyenletre.
+
+    \item \textbf{Számítógépes modell} \\
+    Lekódoljuk és futtatjuk a numerikus modellnek a programját.
+\end{enumerate}
+
+\section{Hibaforrások}
+\begin{enumerate}
+    \item \textbf{Modellhiba} \\
+    A tudományo és a matematikai modellben éltünk egyszerűsítésekkel, melyek nem pontosan ábrázolták a valóságot.
+
+    \item \textbf{Képlethiba} \\
+    A matematikai és a numerikus modellben egy egyszerűbb kifejezéssel helyettesítettünk egy bonyolultabb kifejezést. Tipikusan egy Taylor-sorral helyettesítettünk egy nehezen leírható függvényt.
+    
+    Például:
+    \begin{equation*}
+        \exp(2) = \sum_{k=0}^{\infty} \frac{2^{k}}{k!} \approx \sum_{k=0}^{N} \frac{2^{k}}{k!}
+    \end{equation*}
+
+    A képlethibának az egyik fajtája a \textit{diszkretizációs hiba}, melynek tipikus esetei:
+    \begin{itemize}
+        \item folytonos függvényt helyettesítünk rácspont függvénnyel
+        \item deriváltat helyettesítünk differenciálhányadossal
+        \item integrált helyettesítünk egy véges összeggel
+        \item végtelent helyettesítünk egy tetszőlegesen nagy termlszetes számmal
+    \end{itemize}
+
+    \item \textbf{A bemenő adatok hibája} \\
+    Gyakran nem pontosan kapjuk meg az adatokat és így számolnunk kell ezzel a hibaforrással. Ez gyakran mérési hibáből következik.
+
+    \item \textbf{Számábrázolási hiba} \\
+    A valóéletben nem szimbólikusan számolunk valós számokkal, hanem egy számítógépre hagyjuk a számításokat. A számítógépünk viszont csak egy véges részhalmazát képes ábrázolni a valósszámoknak, így ha egy valós számot adunk meg egy számítógépnek, akkor az a hozzá legközelebb álló ábrázolható számot fogja helyette használni.
+\end{enumerate}
+
+\section{Hibafogalmak}
+Szeretnénk számszerűen megfogalmazni, hogy mennyire pontosan számoltunk és, hogy mennyire tér el a számított érték a valódi értéktől. A továbbiakban jelölje $a \in \mathbb{R}$ a pontos értéket és $\tilde{a} \in \mathbb{R}$ a számított értéket.
+\begin{definition}
+    Az $\tilde{a}$ abszolút hibájának a $\Delta a := a - \tilde{a}$ számot értjük.
+\end{definition}
+\begin{definition}
+    A $\Delta_{a} \in \mathbb{R}_{0}^{+}$ számot az $\tilde{a}$ egy abszolút hibakorlátjának nevezzuk, ha $|\Delta a| \leq \Delta_{a}$
+\end{definition}
+Jelölésben $a = \tilde{a} \pm \Delta_a$
+\begin{definition}
+    $\tilde{a}$ relatív hibájának nevezzük a következőt: $\delta a = \frac{\Delta a}{|\tilde{a}|}$
+\end{definition}
+\begin{definition}
+    $\tilde{a}$ relatív hibakorlátjának nevezzük a következőt: $\delta_{a} \in \mathbb{R}_{0}^{+}$ szam melyre $|\delta a| \leq \delta_{a}$
+\end{definition}
+
+\section{Az alapműveletek hibája}
+A következőkben keressük, hogy mennyire hibázunk, amikor számábrázolási hibából következően nem a pontos értékekkel végezzük el az alapműveleteket.
+
+Tegyük fel, hogy $x, y \in \mathbb{R}$ helyett a hibás $\tilde{x},\tilde{y} \in \mathbb{R}$ számokkal végezzuk el az alapműveleteket.
+
+\begin{enumerate}
+    \item \textbf{Összedaás}
+    \begin{align*}
+        |(x+y) - (\tilde{x}+ \tilde{y})| & = | x - \tilde{x} + y - \tilde{y} | \\
+        & \leq |x - \tilde{x}| + |y - \tilde{y}| \\
+        & \leq \Delta_{x} + \Delta_{y}
+    \end{align*}
+
+    \item \textbf{Kivonás}
+    \begin{align*}
+        |(x - y) - (\tilde{x} - \tilde{y})| & = |x-\tilde{x} + \tilde{y} - y| \\
+        & \leq |x - \tilde{x}| + |\tilde{y} -y| = |x - \tilde{x}| + |y - \tilde{y}| \\
+        & \leq \Delta_{x} + \Delta_{y}
+    \end{align*}
+
+    \item \textbf{Szorzás}
+    \begin{align*}
+        | xy - \tilde{x}\tilde{y} | & = |xy + x\tilde{y} - x\tilde{y} -\tilde{x}\tilde{y}| \\
+        & = |x(y-\tilde{y}) + \tilde{y}(x-\tilde{x})| \\
+        & \approx |\tilde{x}(y-\tilde{y}) + \tilde{y}(x-\tilde{x})| \\ 
+        & \leq |\tilde{x}|\Delta_{y} + |\tilde{y}| \Delta_{x} := \Delta_{xy}
+    \end{align*}
+
+    \item \textbf{Hányados}
+    \begin{equation*}
+        |\frac{x}{y} - \frac{\tilde{x}}{\tilde{y}}| \leq \frac{\Delta_{xy}}{\tilde{y}^{2}}
+    \end{equation*}
+\end{enumerate}
+
+\section{Korrekt kitűzésű feladatok}
+Mielőtt nekiállnánk egy feladatot megoldani érdemes elgondolkoznunk azon, hogy egyáltalán van-e értelme megoldani, vagy korrekten van-e kitűzve a feladat.
+
+Ha kapunk egy feladatot, akkor a következők korrekt elvárások:
+\begin{itemize}
+    \item Létezzen megoldás (\textit{egzisztencia})
+    \item Csak egy megoldás létezzen (\textit{unicitás})
+    \item A feladat pontos megoldása folytonosan függjön a bemenő adatoktól.
+
+    Például az $Ax = b$ nem ilyen, mert ha egy kicsit megváltoztatjuk az $A$ együttható mátrix elemét, akkor a megoldás nagy mértékben változhat.
+\end{itemize}
+
+

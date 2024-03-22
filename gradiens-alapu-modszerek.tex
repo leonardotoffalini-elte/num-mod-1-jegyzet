@@ -1,0 +1,182 @@
+\chapter{Gradiesn alapú módszerek}
+Tekintsük megint a következő egyenletet.
+\begin{equation*}
+    Ax = b \qquad \text{(1)}
+\end{equation*}
+Tegyük fel, hogy $A$ szimmetrikus pozitív definit (szpd).
+
+\begin{definition}
+    Definiáljuk a következő $\phi : \mathbb{R}^{m} \to \mathbb{R}$ függvényt:
+    \begin{equation*}
+        \phi(x) := \frac{1}{2}(x, Ax) - (x, b)
+    \end{equation*}
+\end{definition}
+ez differenciálható $\mathbb{R}^{m}$-en. \\
+Célunk, hogy a $\phi(x)$ függvényt minimalizáljuk, tehát néézük meg, hogy hol lesz $0$ a gradiense.
+\begin{equation*}
+    \phi'(x) = \nabla \phi(x) = Ax - b \qquad \text{(számolassál ellenőrizhető)}
+\end{equation*}
+Ekkor pont az $r := b - Ax$ \textit{maradékvektor} $-1$ szeresét kapjuk. \\
+Hol $0$ a gradiens?
+\begin{equation*}
+    \phi'(x) = Ax - b = 0 \leadsto x = A^{-1}b
+\end{equation*}
+ez éppen a \ref{eq:1} megoldása, tehát a $\phi(x)$ függvényt minimalizálni ekvivalens azzal, hogy megoldjuk a \ref{eq:1} egyenletet.
+\begin{equation*}
+    \phi''(x) = A
+\end{equation*}
+Mivel feltettük, hogy $A$ szpd, ezért $\phi''(x)$ pozitív definit, tehát ahol a gradiens nulla ott lokális minimum hely van. \\
+$\implies x^{*}$ az egyetlen lokális minimum hely / globális minimum helye $\phi$-nek.
+
+\begin{kerdes}
+    Hogy néz ki a $\phi$ függvény?
+\end{kerdes}
+
+\begin{pelda}
+    Tekintsünk egy két dimenziós példát, ahol már a következő egyenletrendszernél tartunk:
+    \begin{align*}
+        2x_{1} & = 4 \\
+        8x_{2} & = 8
+    \end{align*}
+\end{pelda}
+
+\textit{Megoldás:}
+
+Ránézésre látszik, hogy a megoldás $x_{1}^{*} = 2, \; x_{2}^{*} = 1$
+
+Írjuk ki $A$ és $b$ teljes alakját.
+\begin{equation*}
+    A = \begin{bmatrix}
+    2 & 0 \\
+    0 & 8
+    \end{bmatrix}, \quad
+    b = \begin{bmatrix}
+    4 \\
+    8
+    \end{bmatrix}
+\end{equation*}
+
+Helyettesítsük be $A$-t és $b$ a $\phi(x)$ függvénybe.
+\begin{align*}
+    \phi(x) & = \frac{1}{2}(x, Ax) - (x, b) \\
+    \phi(x) & = \frac{1}{2} \left(\begin{bmatrix}
+    x_{1} \\
+    x_{2}
+    \end{bmatrix}, \begin{bmatrix}
+    2x_{1} \\
+    8x_{2}
+    \end{bmatrix}\right) - \left( \begin{bmatrix}
+    x_{1} \\
+    x_{2}
+    \end{bmatrix}, \begin{bmatrix}
+    4 \\
+    8
+    \end{bmatrix} \right) \\
+    & = \frac{1}{2}x_{1}2x_{1} + \frac{1}{2}x_{2}8x_{2} - 4x_{1}-8x_{2} = (x_{1}- 2)^{2} + 4(x_{2}-1)^{2}-8
+\end{align*}
+Vizsgáljuk a szintvonalait ennek a függvénynek. \\
+$Ac = 0$-hoz tartozó szintvonal:
+\begin{equation*}
+    (x_{1} - 2)^{2} + 4(x_{2} - 1)^{2} - 8 = 0
+\end{equation*}
+\begin{equation*}
+    \frac{(x_{1} - 2)^{2}}{8} + \frac{(x_{2} - 1)^{2}}{2} = 1
+\end{equation*}
+Tehát azt kaptuk, hogy ez egy $(2, 1)$ középpontú ellipszis $\sqrt{ 8 }, \sqrt{ 2 }$ hosszú főtengelyekkel. Azaz valóban $(2, 1)$ a megoldás.
+
+Tehát a függvény szintvonalai koncentrikus hiperellipszoidok!
+
+Először gondoljuk meg, hogy egy $x \in \mathbb{R}^{m}$ pontot és egy $p \neq 0$ vektort rögzítve $p$ irány mentén hol veszi fel a $\phi$ a legkisebb értéket?
+
+Jelölés: $g(\alpha) := \phi(x + \alpha p)$
+
+\begin{kerdes}
+    Mely $\alpha$-ra lesz $g(\alpha)$ függvény értéke minimális?
+\end{kerdes}
+
+\begin{allitas}
+    A $g(\alpha) = \phi(x + \alpha p)$ függvény egyértélmű minimumát az
+    \begin{equation*}
+        \alpha = \frac{(p, r)}{(p, Ap)}
+    \end{equation*}
+megvalásztás esetén veszi föl!
+\end{allitas}
+
+\textit{Bizonyítás:}
+Faragó I. Numerikus módszerek jegyzet 83. oldalán található.\cite{farago}
+
+\begin{kerdes}
+    Hogyan válasszuk meg $p_{1}, p_{2}, \dots$ keresési irányokat?
+\end{kerdes}
+
+
+\section{Gradiens módszer}
+Tudjuk: A $\nabla \phi$-vel ellentétes irányban a legmeredekebb a lejtés.
+
+$x_{i}$ pontban $p_{i+1}$-el jelölve a keresési irányt:
+
+\begin{align*}
+    p_{i+1} & := -\nabla \phi(x_{i}) \\
+    \nabla \phi(x) & = Ax - b = -r \\
+    \implies p_{i+1} & := - \nabla \phi(x_{i}) = b - Ax_{i} = r_{i}
+\end{align*}
+ami éppen az $x_{i}$ pontbeli maradékvektor.
+
+\begin{equation*}
+    x_{i} \leadsto x_{i+1} = x_{i} + \alpha \cdot p_{i+1} = x_{i} + \frac{(p_{i+1}, r_{i})}{(p_{i+1}, Ap_{i+1})} \cdot p_{i+1} = x_{i} + \frac{(r_{i}, r_{i})}{(r_{i}, Ar_{i})} \cdot r_{i}
+\end{equation*}
+\begin{kerdes}
+    Mi lesz $x_{i+1}$-ben a maradékvektor?
+\end{kerdes}
+\begin{equation*}
+    r_{i+1} = b - Ax_{i+1} = b - A \cdot \left(x_{i} + \frac{(r_{i}, r_{i})}{(r_{i}, Ar_{i})} \cdot r_{i}\right)
+\end{equation*}
+Vegyük észre: $r_{i} \perp r_{i+1}$, mert addig megyunk $p_{i}$ irányban ameddig nem érintjuk a következő szintvonalat, amire a következő gradiens merőleges.
+
+Ez előző vizuálisan magyarázza az egymást követő irányok merőlegességét, de bizonyítsuk be formálisabban. Írjuk fel a skaláris szorzatát az egymást koveto iranyoknak!
+\begin{align*}
+    (r_{i}, r_{i+}) & \stackrel{?}{=} 0 \\
+    (r_{i}, r_{i+1}) & = \left( r_{i}, b - A\left( x_{i} + \frac{(r_{i}, r_{i})}{(r_{i}, Ar_{i})} \cdot r_{i}\right) \right) \\
+    & = (r_{i}, r_{i}) - (r_{i}, A\frac{(r_{i}, r_{i})}{(r_{i}, Ar_{i})} \cdot r_{i}) \\
+    & = (r_{i}, r_{i}) - \frac{(r_{i}, r_{i})}{(r_{i}, Ar_{i})}(r_{i}, Ar_{i}) \\
+    & = (r_{i}, r_{i}) - (r_{i}, r_{i}) = 0
+\end{align*}
+
+\begin{megj}
+    Ha $\operatorname{cond}_{2}(A)$ nagy, akkor lassú a konvergencia.
+\end{megj}
+
+
+\section{Konjugált gradiens-módszer}
+
+Az előbb láttuk be, hogy a gradiens módszernél a $p_{1}$ kerésési irány ($r_{0}$) $\perp$ $r_{1}$.
+Azaz:
+$$
+0 = (p_{1}, r_{1}) = (p_{1}, b - Ax_{1}) = (p_{1}, Ax^{*} - Ax_{1}) = (p_{1}, A(x^{*} - x_{1}))
+$$
+
+\begin{definition}
+    Legyen $A \in \mathbb{R}^{m \times m}$ szimmetrikus pozitív definit (szpd). Azt mondjuk, hogy $x$ es $y \in \mathbb{R}^{m}$ vektorok $A$-konjugáltak/ortogonálisak, ha $(x, Ay) = 0$.
+\end{definition}
+
+Tehát olyan kerésési irányt lenne érdemes választani, amely $p_{1}$-re $A$-ortogonális! \\
+Keressük $p_{2}$-t a következő alakban:
+\begin{align*}
+    p_{2} & = r_{1} - \beta_{1} \cdot p_{1} \\
+    (p_{1}, A(r_{1}-\beta_{1}\cdot p_{1})) & = 0 \\
+    \beta_{1} & = \; ?  
+\end{align*}
+\begin{align*}
+    (p_{1}, Ar_{1}) - \beta_{1} (p_{1}, Ap_{1}) & = 0 \\
+    \implies \beta_{1} & = \frac{(p_{1}, Ar_{1})}{(p_{1}, Ap_{1})}
+\end{align*}
+Ezen $\beta_{1}$-et választva, a $p_{2} = r_{1} - \beta_{1} \cdot p_{1}$ irányba lépve az $x^{*}$ minimum helybe lépunk! Tehát $m = 2$ esetén $2$ lépésben meg tudjuk határozni a lineáris egyenletrendszer megoldását.
+
+\begin{megj}
+    $A \in \mathbb{R}^{m \times m}$ esetén is általánosítható az eljárás. Ekkor legfeljebb $m$ lépésben megkapjuk a megoldást.
+\end{megj}
+
+
+
+
+

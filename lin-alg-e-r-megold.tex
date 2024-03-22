@@ -1,0 +1,434 @@
+\chapter{Lineáris algebrai egyenletrendszerek megoldása}
+Lineáris algebrai egyenletrendszerek megoldásaira két féle megoldási módszert fogunk tanulni. Direkt megoldókat és iterációs módszereket. Az előzőhöz tartozik például a Cramer-szabály vagy a Gauss-eliminácó. Az iterációs módszereknek a lényege az, hogy egy vektorsorozatot generálnak, melyek tartanak a pontos megoldáshoz.
+
+\section{Gauss-elimináció}
+Megoldando: $Ax = b, \quad A \in \mathbb{R}^{m \times m}, \quad \det A \neq 0 \implies \exists! \text{m.o.}, \quad b \in \mathbb{R}^{m}$.
+Azaz:
+\begin{align*}
+    a_{11}x_{1} + a_{12}x_{2} + \dots + a_{1m}x_{m} & = b_{1} \\
+    \vdots & \\
+    a_{m 1}x_{1} + a_{m 2}x_{2} + \dots + a_{m m}x_{m} & = b_{m}
+\end{align*}
+
+I. alakban: Átalakítjuk az egyenletrendszert felső háromszög mátrixóvá. A főátlóban legyenek egyesek.
+
+\begin{enumerate}
+    \item lépés: Tfh $a_{11} \neq 0$ ekkor (1)
+$$x_{1} + \frac{a_{12}}{a_{11}}x_{2} + \frac{a_{13}}{a_{11}}x_{3} + \frac{a_{1m}}{a_{11}}x_{m} = \frac{b_{1}}{a_{11}} = y_{1}$$
+
+    \item lépés: \ref{eq:2} segitsegevel a (2) - (m) egyenletekbol eliminaljuk $x_{1}$-et, kivonva beloluk az \ref{eq:2}-nek az $a_{i 1}$-szereset.
+    \begin{align*}
+    x_{1} + \frac{a_{12}}{a_{11}}x_{2} + \frac{a_{13}}{a_{11}}x_{3} + \frac{a_{1m}}{a_{11}}x_{m} & =  \frac{b_{1}}{a_{11}} = y_{1} \\
+        a_{22}^{(1)}x_{2}  + \dots   & =  y_{2} \\
+         & \vdots \\
+     a_{m 2}^{(1)}x_{2}  +  \dots + a_{m m}^{(1)}x_{m} & = b_{m}
+    \end{align*}
+    
+    \item lépés: Nem írom le mert mindenki tud Gauss-eliminalni...
+
+\end{enumerate}
+
+\begin{kerdes}
+    Mikor hajtható végre a Gauss-elimináció?
+\end{kerdes}
+I. szakaszban $Ax = b \implies Ux = y$
+
+\begin{kerdes}
+    Mi a kapcsolat $y$ es $b$ kozott?
+\end{kerdes}
+$b_{1} = a_{11}y_{1}$ \\
+$b_{2} = a_{21}y_{1} + a_{22}^{(1)}y_{2}$ \\
+$\dots$
+és így tovább
+$b_{j} = l_{j 1}y_{1} + l_{j 2}y_{2} + \dots + l_{j j }y_{j}, \quad j = 1, \dots, m, \text{ ahol } l_{jj} = a_{jj}^{(j-1)}$
+
+$$
+\begin{bmatrix}
+a_{11} & 0 & \dots & 0 \\
+a_{21} & a_{22}^{(1)} & \dots & 0 \\
+& & \dots & a_{mm}^{(m-1)}
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+y_{1} \\
+y_{2} \\
+\vdots \\
+y_{m}
+\end{bmatrix}
+\leq
+\begin{bmatrix}
+b_{1} \\
+b_{2} \\
+\vdots \\
+b_{m}
+\end{bmatrix}
+$$
+
+Ha a Gauss-elim elvegezheto akkor a fenti matrix invertalhato, azaz a foatloban nincs $0$, tehat $\exists L^{-1}$, ahol $L$ a fenti also haromszog matrix.
+
+Tehat $Ly = b \implies y = L^{-1}b \implies Ux = L^{-1}b \implies LU x = b$
+
+Ebből adódik egy új módszer (LU felbontás):
+\begin{enumerate}
+    \item Felírjuk az $A$-t $A = LU$ alakban, ahol $L$ invertálható alsó háromszög mátrix és $U$ olyan felső háromszög mátrix melynek a főátlójában csak egyesek vannak.
+    \item Megoldjuk az $Ly = b$ egyenletrendszert $\implies y$
+    \item Megoldjuk az $Ux = y$ egyenletrendszert $\implies x$
+\end{enumerate}
+
+Belátható, hogy az LU felbontás első és második lépse ekvivalens a Gauss-elimináció első szakaszaval es harmadik lépés ekvivalens a Gauss-elimináció második szakaszával. Tehát ez a módszer a Gauss-elimináció módosított algoritmusa.
+
+Tehát ahhoz, hogy megválaszoljuk, hogy mikor végezhető el a Gauss-elimináció elég megválaszolnunk, hogy mikor létezik LU felbontás.
+
+A következőképpen jelöljük a balfelső sarokdeterminánsokat (főminorokat):
+\begin{equation*}
+    \Delta_{1} := a_{11}, \quad, \Delta_{2} := \det \begin{bmatrix}
+    a_{11} & a_{12} \\
+    a_{21} & a_{22}
+    \end{bmatrix}
+    ,
+    \dots,
+    \Delta_{m} := \det A
+\end{equation*}
+
+\begin{allitas}
+    Ha $\Delta_{j} \neq 0, \; \forall j \in \{1, \dots, m\}$, akkor $\exists$ LU felbontása $A$-nak, és az egyértelmű.
+\end{allitas}
+\textit{Bizonyítás}: Először bizonyítsuk a létezést. Csak az $A \in \mathbb{R}^{2 \times 2}$ esetre mutatjuk meg, a bizonyítást teljes indukcióval lehet folytatni.
+$$
+A = L \cdot U = 
+\begin{bmatrix}
+l_{11} & 0 \\
+l_{21} & l_{22}
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+1 & u_{12} \\
+0 & 1
+\end{bmatrix}
+$$
+felbontás létezik $\iff$ létezik $l_{11}, l_{21}, l_{22}, u_{12}$ ismeretlenekre nézve megoldása a következő egyenlet rendszernek.
+
+\begin{align*}
+l_{11} & = a_{11} \\
+l_{11} u_{12} & = a_{12} \\
+l_{21} & = a_{21} \\
+l_{21} u_{12} + l_{22} & = a_{22}
+\end{align*}
+és a következő $L$ mátrixnak létezzen inverze
+$$
+L = \begin{bmatrix}
+l_{11} & 0 \\
+l_{21} & l_{22}
+\end{bmatrix}
+$$
+tehát $l_{11} \neq 0, l_{22} \neq 0$. \\
+Ha $a_{11} \neq 0$, akkor látható, hogy ennek az egyenletrendszernek $\exists!$ megoldása:
+\begin{equation*}
+    l_{11} = a_{11}, \quad u_{12} = \frac{a_{12}}{a_{11}}, \quad l_{21} = a_{21}, \quad l_{22} = a_{22} - a_{21} \frac{a_{12}}{a_{11}}
+\end{equation*}
+Továbbá $l_{11} \neq 0$, mert $a_{11} \neq 0$ és $l_{22} \neq 0$, mert $l_{22} = \frac{\det A}{a_{11}}$ $\implies \exists L^{-1}$ \\
+\textit{Megjegyzés}: $m > 2$-re teljes indukcioval kovetkezik az allitas.
+
+Most lássuk be, hogy egyértelműen létezik. \\
+Tegyük fel, hogy $A = L_{1}U_{1} = L_{2}U_{2}$
+\begin{align*}
+L_{2}^{-1}L_{1}U_{1} & = U_{2} \\
+L_{2}^{-1}L_{1} & = U_{2}U_{1}^{-1}
+\end{align*}
+Mivel az alsóháromszög mátrixok és a felső háromszög mátrixok is egy-egy csoportot alkotnak, ezért a fenti csak akkor igaz, ha $L_{2}^{-1}L_{1}$ és $U_{2}U_{1}^{-1}$ is diagonális. Továbbá $U_{1, 2}$-nek a főátlójában egyesek vannak, tehát $U_{2}U_{1}^{-1}$-nek is a főátlójában egyesek vannak. Tehát mindkét oldalon az egység mátrix van.
+$$
+\implies L_{2}^{-1}L_{1} = I = U_{2}U_{1}^{-1} \implies L_{1} = L_{2}, \quad U_{1} = U_{2}
+$$
+Megmutatható, hogy ha $\Delta_{j} \neq 0$ valamely $j$-re, akkor $\exists$  LU-felbontása $A$-nak.
+$2 \times 2$ esetben jól látszik:
+\begin{equation*}
+    \begin{bmatrix}
+    a_{11} & a_{12} \\
+    a_{21} & a_{22}
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+    0 & a_{12} \\
+    a_{21} & a_{22}
+    \end{bmatrix}
+\end{equation*}
+
+\begin{equation*}
+    \begin{bmatrix}
+    0 & a_{12} \\
+    a_{21} & a_{22}
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+    l_{11} & 0 \\
+    l_{21} & l_{22}
+    \end{bmatrix}
+    \cdot
+    \begin{bmatrix}
+    1 & u_{12} \\
+    0 & 1
+    \end{bmatrix}
+    \implies l_{11} = 0 \implies \text{ekkor } L \text{ nem invertálható}
+\end{equation*}
+
+\begin{kov}
+    A Gauss-elimináció pontosan akkor hatható végre, ha $A$ összes bal felső sarokdeterminánsa nem $0$.
+\end{kov}
+
+\begin{megj} Pár észrevétel a Gauss-elimináció és az LU felbontással kapcsolatban:
+    \begin{enumerate}
+        \item A $\Delta_{j} \neq 0, \quad \forall j = 1, \dots, m$ teljesül, ha $A$ \textit{szimmetrikus pozitiv definit} mátrix (szpd).
+        \item A $\Delta_{j} \neq 0, \quad \forall j = 1, \dots, m$ teljesül, ha $A$ \textit{szigoruan dominans foatloju}, tehát $\forall i = 1, \dots, n$-re $2\lvert a_{ii} \rvert > \sum_{j = 1}^{m} \lvert a_{ij} \rvert$.
+        \item Ha $\det A \neq 0$, akkor mindig $\exists P \in \mathbb{R}^{n\times m}$ permutáló mátrix, hogy $PA$-nak $\exists$ LU felbontása.
+        \item Ha $A$ szimmetrikus pozitiv definit mátrix, akkor létezik egy másik felbontása is: $A = G \cdot G^{T}$, ahol $G$ alsó háromszög mátrix, pozitív főátlóval. (Cholesky-felbontas)
+    \end{enumerate}
+\end{megj}
+
+\section{Főelem kiválasztás (pivoting)}
+A Gauss-elimináció során a $j$-edik lépésben a $j$-edik sort elosztjuk $a_{jj}$-vel. Tehát minél kisebb $a_{jj}$, annál pontatlanabb az osztás. Ennek orvosolására valahogyan meg kéne oldanunk, hogy egy nagyobb elemmel osszunk, de a Gauss-elimináció lényegét tartsuk meg.
+
+\textbf{Részleges főelem kiválasztás:} Sorcserével a főátlóba hozzuk az $a_{jj}$ alatti legnagyobb abszolútértékű elemet.
+
+\textbf{Teljes főelem kiválasztás:} Sorcserével és oszlopcserével az $A[j:n, \; j:n]$ jobb alsó részmátrix legnagyobb abszolútértékű elemet visszük a főátlóba. Itt figyelni kell arra, hogy oszlop cserénél az $x$ elemeit is cseréljük. Tehát ha egy $P$ mátrixszal permutáljuk az oszlopait $A$-nak, akkor mikor visszaolvassuk $x$ megoldást, akkor $P^{-1}$-el meg kell szorozni elötte.
+
+\section{Klasszikus iterációs módszerek}
+\begin{definition}
+    Azt mondjuk, hogy az $x^{*} \in \mathbb{R}^{n}$ az $f:\mathbb{R}^{n}\to \mathbb{R}^{n}$ \textit{fixpontja}, ha $f(x^{*}) = x^{*}$
+\end{definition}
+\begin{definition}
+    az $f:\mathbb{R}^{m}\to \mathbb{R}^{m}$ függvény \textit{kontrakció} az $\lvert\lvert \cdot \rvert\rvert$ $\mathbb{R}^{n}$-beli normában, ha $\exists q \in [0,1]$-melyre:
+    \begin{equation*}
+        \lvert\lvert f(x)-f(y) \rvert\rvert \leq q\cdot \lvert\lvert x-y \rvert\rvert \quad \forall x,y \in D(f)
+    \end{equation*}
+\end{definition}
+
+\begin{tetel}(Banach fixpont tétel) \\
+    Ha $f:\mathbb{R}^{n}\to \mathbb{R}^{n}$ az egész $\mathbb{R}^{n}$-en értelmezett kontrakció ($q$-val), akkor:
+    \begin{enumerate}
+        \item $f$-nek $\exists! x^{*}$ fixpontja.
+        \item Tetszoőleges $x^{0} \in \mathbb{R}^{n}$ vektorból indítva $x^{n+1} = f(x^{n})$ rekurzióval felépített $(x)_{n}$ sorozat konvergens, és $x_{n} \to x^{*}$.
+        \item $\lvert\lvert x^{n} - x^{*} \rvert\rvert \leq \frac{q^{n}}{1-q} \lvert\lvert x^{1} - x^{0} \rvert\rvert$
+    \end{enumerate}
+\end{tetel}
+
+\begin{kerdes}
+    Hogyan alkalmazhatjuk ezt a tételt lineéris algebrai egyenletrendszerek megoldására?
+\end{kerdes}
+
+\begin{equation}\label{eq:3}
+    Ax = b, \quad A\in\mathbb{R}^{m\times m}, \quad \det A \neq 0, \quad b \in \mathbb{R}^{m}
+\end{equation}
+
+Tegyük fel, hogy \ref{eq:3} átírható a következő alakra:
+\begin{equation}\label{eq:4}
+    x = Qx + r, \quad Q \in \mathbb{R}^{m\times m}, \quad r \in \mathbb{R}^{m}
+\end{equation}
+Ekkor az $f(x) := Qx + r$ ejlöléssel a fealdat megoldása az $f:\mathbb{R}^{m}\to \mathbb{R}^{m}$ függvény fixpontja. Ezt a fixpontot keressük iterációval.
+
+\begin{kerdes}
+    Mikor lesz $f$ kontrakció?
+\end{kerdes}
+\begin{equation*}
+    x, y \in \mathbb{R}^{m}, \quad f(x) - f(y) = Qx + r - Qy - r = Q(x -y)
+\end{equation*}
+\begin{equation*}
+    \lvert\lvert f(x) - f(y) \rvert\rvert _{\mathbb{R}^{m}} = \lvert\lvert Q(x-y) \rvert\rvert _{\mathbb{R}^{m}} \leq \lvert\lvert Q \rvert\rvert \cdot \lvert\lvert x-y \rvert\rvert _{\mathbb{R}^{m}} 
+\end{equation*}
+Tehát be kell látni, hogy $\lvert\lvert Q \rvert\rvert < 1$, akkor $f$ kontrakció és $q = \lvert\lvert Q \rvert\rvert$. \\
+Banach fixpont tételből következik, hogy a $x^{n+1} = Qx^{n} + r$ rekurzióval definiált vektorsorozat konvergens (bármely $\mathbb{R}^{m}$-beli vektornomában), és $x_{n}\to x^{*}$, ahol $x^{*}$ \ref{eq:3} megoldása.
+
+\begin{kerdes}
+    Hogyan írhatjuk át \ref{eq:3}-et olyan alakra amilyen \ref{eq:4}?
+\end{kerdes}
+\begin{kerdes}
+    Mikor fog teljesülni, hogy $\lvert\lvert Q \rvert\rvert < 1$ valamelyik indukált mátrixnorma szerint?
+\end{kerdes}
+
+\section{Richardson-iteráció}
+valami, valami ... hozzáadunk $x$-et mindkét oldalhoz és készen vagyunk...
+
+\section{Jacobi-iteráció}
+A célunk még mindig, hogy egy függvénynek a fixpontjaként írjuk fel a lineáris egyenletrendszer megoldását. Ezt megtehetjük, ha a következőképpen felbontjuk az együttható mátrixot és egy kis algebrai manipulációt végzünk.
+\begin{align*}
+    Ax & = b \\
+    A & = L + D + U \\
+    (L + D + U)x & = b \\
+    Dx & = -(L+U)x + b \\
+    x & = D^{-1}(b - (L+U)x) \\
+    & = -D^{-1}(L+U)x + D^{-1}b \\
+    Q_{J} & = -D^{-1}(L+U) \quad r_{J} \\
+    & = D^{-1}b
+\end{align*}
+Ekkor kapjuk, hogy a Jacobi fixpont iterációra rögzítsük $x^{0} \in \mathbb{R}^{m}$ kezdőpontot és legyen az általános lépés:
+\begin{equation*}
+    x^{n+1} = -D^{-1}(L+U)x^{n} + D^{-1}b
+\end{equation*}
+
+\begin{allitas}
+    \begin{equation*}
+        \lvert\lvert Q_{j} \rvert\rvert_{\infty} < 1 \iff A \text{ szigoruan dominans foatloju}
+    \end{equation*}
+\end{allitas}
+
+\begin{kov}
+    A $A$ szigorúan domináns főátlójú, akkor a Jacobi-iteráció konvergens.
+\end{kov}
+
+\section{Gauss-Seidel-iteráció}
+A célunk még mindig, hogy egy függvénynek a fixpontjaként írjuk fel a lineáris egyenletrendszer megoldását. Ezt megtehetjük, ha a következőképpen felbontjuk az együttható mátrixot és egy kis algebrai manipulációt végzünk.
+
+\begin{align*}
+Ax & = b \\
+A & = L + D + U \\
+(L+D+U)x & = b \\
+(L+D)x & = -Ux + b \\
+x & = -(L+D)^{-1}Ux + (L+D)^{-1}b \\
+Q_{GS} & = -(L+D)^{-1}U, \quad r_{GS} = (L+D)^{-1}b
+\end{align*}
+
+\section{Stacionárius-iteráció}
+\textit{Észrevétel:} A Jacobi-iteráció átírható a következő módon:
+\begin{align*}
+    x^{n+1} & = -D^{-1}(L+U)x^{n} + D^{-1}b \\
+    Dx^{n+1} & = - (L+U)x^{n} + b \\
+    Dx^{n+1} & = -(A - D)x^{n} + b \\
+    D(x^{n+1} - x^{n}) + Ax^{n} & = b
+\end{align*}
+A fentit a Jacobi-iteráció kanonikus alakjának szokás nevezni.
+
+Hasonló módon át tudjuk írni a Gauss-Seidel iterációt is:
+\begin{equation*}
+    (D+L)(x^{n+1}-x^{n})+Ax^{n}=b \quad \quad (\text{SI})
+\end{equation*}
+A fentit a Gauss-Seidel-iteráció kanonikus alakjának szokás nevezni.
+
+\begin{definition}
+    Legyen $B \in \mathbb{R}^{m\times m}$, és $\tau > 0$ szám. A
+    \begin{equation*}
+        B \cdot \frac{x^{n+1}-x^{n}}{\tau} + Ax^{n} = b
+    \end{equation*}
+iterációt \textit{stacionárius-iterációnak} nevezzük.
+\end{definition}
+
+\begin{megj}
+    Az előbb említet iterációs módszerek összegezve:
+    \begin{itemize}
+        \item Jacobi: $B = D, \quad \tau = 1$
+        \item Gauss-Seidel: $B = D + L, \quad \tau = 1$
+        \item Még általánosabb: $B \leftrightarrow B_{n}, \quad \tau \leftrightarrow \tau_{n}$
+    \end{itemize}
+\end{megj}
+
+Említés szintjén még egy stacionárius iteráció a \textit{Túlrelaxációs módszer} vagy angolul \textit{Successive overrelaxation method (SOR)}:
+\begin{equation*}
+    B = D + \omega L, \quad \tau = \omega, \quad \text{ ahol } \omega > 0 \text{ adott paraméter}
+\end{equation*}
+\begin{equation*}
+    (D + \omega L)\cdot \frac{x^{n+1}-x^{n}}{\omega} + Ax^{n} = b
+\end{equation*}
+
+\begin{megj}
+    A SOR módszert $\omega = 1$-el írva visszakapjuk a Gauss-Seidel-iterációt.
+\end{megj}
+
+\section{Stacionárius iteráció konvergenciája}
+\textit{Emlék:}
+\begin{equation*}
+    B \frac{x^{n+1} - x^{n}}{\tau} + A \cdot x^{n} = b \qquad \text{(SI)}
+\end{equation*}
+\begin{equation*}
+    Ax = b
+\end{equation*}
+
+Tegyük fel, hogy $A$ szimmetrikus pozitív definit (szpd). Tehát $A = A^{T},\; x^{T}Ax > 0, \; \text{ha } x \neq 0$. Másképpen, $\exists \delta > 0: (Ax, x) \geq \delta \cdot \lvert\lvert x \rvert\rvert^{2}$. \\
+Jelölje $x^{*}$ a \ref{eq:1} egyenelet megoldasat, azaz $Ax^{*} = b$ és $e_{n}:=x^{n}-x^{*}$ (az $n$-edik iterácio hibáját).
+
+\begin{definition}
+    Azt mondjuk hogy a stacionárius iteráció (SI) konvergens, ha $\exists \lim x_{n}$ és $x_{n}\to x^{*}$, azaz $\lim_{ n \to \infty }e_{n} = 0$.
+\end{definition}
+
+\begin{allitas}
+    Tegyük föl, hogy $A$ szpd. Ha $\exists B^{-1}$, es $\tau > 0$  parameéer olyan, hogy $B - 0.5 \tau A$ szpd, akkor a stacionárius iterácio konvergens.
+\end{allitas}
+\textit{Bizonyítás:}
+\begin{equation*}
+    x^{n} = e_{n} + x^{*}, \quad x^{n+1} = e_{n+1} + x^{*} \leadsto \text{ (SI)-be beirva}
+\end{equation*}
+\begin{equation*}
+    B \frac{e_{n+1} + x^{*} - e_{n} - x^{*}}{\tau} + Ae_{n} + Ax^{*} = b
+\end{equation*}
+\begin{equation*}
+    B \frac{e_{n+1} - e_{n}}{\tau} + Ae_{n} = 0 \qquad \text{(3) hibaegyenlet}
+\end{equation*}
+Fejezzük ki $e_{n+1}$-el
+\begin{align*}
+    Be_{n+1} & = (B - \tau A)e_{n} \\
+    e_{n+1} & = (I - \tau B^{-1}A)e_{n} \\
+    Ae_{n+1} & = (A - \tau AB^{-1}A)e_{n} \\
+    \implies (Ae_{n+1}, e_{n+1}) & = (Ae_{n} - \tau AB^{-1}Ae_{n}, e_{n} - \tau B^{-1}Ae_{n})
+\end{align*}
+\begin{equation*}
+    = (Ae_{n}, e_{n}) - \tau(AB^{-1}Ae_{n}, e_{n}) - \tau(Ae_{n}, B^{-1}Ae_{n}) + \tau ^{2}(AB^{-1}Ae_{n}, B^{-1}Ae_{n})
+\end{equation*}
+Tudjuk, hogy
+\begin{equation*}
+    (AB^{-1}Ae_{n}, e_{n}) = (B^{-1}Ae_{n}, A^{T}e_{n}) = (B^{-1}Ae_{n}, Ae_{n}) = (Ae_{n}, B^{-1}Ae_{n})
+\end{equation*}
+Tehát
+\begin{equation*}
+    (Ae_{n+1},e_{n+1}) = (Ae_{n}, e_{n}) - 2\tau(AB^{-1}Ae_{n}, e_{n}) + \tau ^{2}(AB^{-1}Ae_{n}, B^{-1}Ae_{n})
+\end{equation*}
+Jelölje $J_{n} = (Ae_{n}, e_{n})$. Ezzel
+\begin{equation*}
+    J_{n+1} = J_{n} - 2\tau(Ae_{n}, B^{-1}Ae_{n}) + \tau ^{2}(AB^{-1}Ae_{n}, \stackrel{y_{n}}{\overbrace{ B^{-1}Ae_{n}}})
+\end{equation*}
+Ezzel $By_{n} = Ae_{n}$
+\begin{equation*}
+    = J_{n} - 2\tau(By_{n}, y_{n}) + \tau ^{2} (Ay_{n}, y_{n}) = J_{n} - 2\tau \left( (By_{n}, y_{n}) - \frac{\tau}{2}(Ay_{n}, y_{n}) \right)
+\end{equation*}
+\begin{equation}\label{eq:6}
+    \leadsto J_{n+1} = J_{n} - 2\tau((B - 0.5\tau A)y_{n}, y_{n}) \qquad \text{(4)}
+\end{equation}
+\begin{equation*}
+    \implies J_{n+1} \leq J_{n}
+\end{equation*}
+Mert feltétel szerint $\tau > 0$ és $(B - 0.5 \tau A)$ szpd, tehát pozitív szor pozitív tagot vonunk ki, tehát egy pozitív számot vonunk ki. Ezért a jobb oldal kisebb mint $J_{n}$.
+Így a $(J_{n})$ sorozat monoton csökkenő, és $J_{n} \geq 0$, (mert $J_{n} = (Ae_{n}, e_{n})$ ), tehát ez a sorozat alulról korlátos.
+Tehát $(J_{n})$ konvergens, jelöles $J^{*} := \lim_{ n \to \infty }J_{n}$ \\
+\ref{eq:6}-ban vegyuünk limeszt $\leadsto$
+\begin{equation*}
+    J^{*} = J^{*} - 2\tau \lim_{ n \to \infty } ((B - 0.5 \tau A)y_{n}, y_{n})
+\end{equation*}
+\begin{equation*}
+    \implies \lim_{ n \to \infty } ((B - 0.5 \tau A)y_{n}, y_{n}) = 0
+\end{equation*}
+Mivel $B - 0.5\tau A$ szpd, ezért $\exists \delta > 0: ((B - 0.5 \tau A)y_{n}, y_{n}) \geq \delta \cdot \lvert\lvert y_{n} \rvert\rvert^{2}$.
+Rendőrelv:
+\begin{equation*}
+    ((B - 0.5 \tau A)y_{n}, y_{n}) \geq \delta \cdot \lvert\lvert y_{n} \rvert\rvert^{2} \geq 0
+\end{equation*}
+\begin{equation*}
+    \lim_{ n \to \infty } ((B - 0.5 \tau A)y_{n}, y_{n}) \geq \lim_{ n \to \infty }  \delta \cdot \lvert\lvert y_{n} \rvert\rvert^{2} \geq 0
+\end{equation*}
+\begin{equation*}
+    \implies 0 \geq \lim_{ n \to \infty } \delta \cdot \lvert\lvert y_{n} \rvert\rvert ^{2} \geq 0 \implies \lim_{ n \to \infty } \delta \cdot \lvert\lvert y_{n} \rvert\rvert ^{2} = 0
+\end{equation*}
+Mivel $y_{n} = B^{-1}Ae_{n}$ $\leadsto e_{n} = A^{-1}By_{n}$, ezért
+\begin{equation*}
+    0 \leq \lvert\lvert e_{n} \rvert\rvert = \lvert\lvert A^{-1}By_{n} \rvert\rvert \leq \lvert\lvert A^{-1}B \rvert\rvert  \cdot \lvert\lvert y_{n} \rvert\rvert \to 0 \implies \lvert\lvert e_{n} \rvert\rvert \to 0 \implies e_{n} \to 0
+\end{equation*}
+Ezzel beláttuk, hogy konvergens, mert a hiba $0$-hoz tart.
+
+\section{SOR-módszer konvergenciája}
+\begin{kerdes}
+    Hogyan válasszuk meg $\omega$ paramétert, hogy konvergáljon?
+\end{kerdes}
+Észrevétel: erősen függ $\omega$ választása $A$-tól.
+\begin{allitas}
+    Tetszőleges $A \in \mathbb{R}^{n \times m}$ eséten a SOR-módszer konvergenciájához szükséges, hogy $\omega \in (0, 2)$.
+\end{allitas}
+\begin{allitas}
+    Ha $A$ szpd, akkor $\omega \in (0, 2)$ elégséges is a konvergenciához. \\
+$\implies$ Ha $A$ szpd, akkor a Gauss-Seidel iterácio konvergens, mert a Gauss-Seidel iteráció pont a SOR-modszer $\omega = 1$-el.
+\end{allitas}
+
